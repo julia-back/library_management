@@ -6,6 +6,9 @@ from . import views
 app_name = UsersConfig.name
 
 urlpatterns = [
+    path("token/", views.UserTokenObtainPairView.as_view(), name="token_pair"),
+    path("token_refresh/", views.UserTokenRefreshView.as_view(), name="token_refresh"),
+
     path("user/new/", views.UserCreateAPIView.as_view(), name="user_create"),
     path("user_list/", views.UserListAPIView.as_view(), name="user_list"),
     path("user/<int:pk>/", views.UserRetrieveAPIView.as_view(), name="user_retrieve"),

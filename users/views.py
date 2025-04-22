@@ -1,11 +1,21 @@
 from .serializers import UserSerializer
 from .models import User
 from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+
+class UserTokenObtainPairView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
+
+class UserTokenRefreshView(TokenRefreshView):
+    permission_classes = [AllowAny]
 
 
 class UserCreateAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
-    permission_classes = []
+    permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
 
