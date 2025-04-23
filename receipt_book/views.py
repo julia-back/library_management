@@ -1,4 +1,4 @@
-from rest_framework import generics, views
+from rest_framework import generics
 from .models import ReceiptBook
 from .serializers import ReceiptBookSerializer
 from datetime import date
