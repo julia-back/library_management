@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django_filters",
 
     "books",
+    "receipt_book",
     "users",
 ]
 
