@@ -16,6 +16,11 @@ class Book(models.Model):
         "ru": "Русский",
     }
 
+    status_choices = {
+        "free": "Доступна для выдачи",
+        "on_hands": "Выдана на руки",
+    }
+
     serial_number = models.CharField(unique=True)
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=2000)
@@ -25,3 +30,4 @@ class Book(models.Model):
     publishing_house = models.CharField(max_length=255)
     place_of_publication = models.CharField(max_length=50)
     publication_year = models.PositiveIntegerField(max_length=4)
+    receipt_status = models.CharField(choices=status_choices, default="free")

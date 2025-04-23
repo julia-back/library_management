@@ -9,4 +9,4 @@ class ReceiptBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.SET("book_deleted"))
     receipt_date = models.DateField(auto_now_add=True)
     period_in_days = models.PositiveIntegerField(default=7)
-    return_date = models.DateField()
+    return_date = models.DateField(blank=True, null=True)
