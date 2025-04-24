@@ -4,6 +4,7 @@ from .serializers import ReceiptBookSerializer
 from datetime import date
 from users.permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsOwner
 
 
 class CreateReceiptBookAPIView(generics.CreateAPIView):
@@ -42,14 +43,15 @@ class ReturnBookAPIView(generics.GenericAPIView):
 class ListReceiptBookAPIView(generics.ListAPIView):
     queryset = ReceiptBook.objects.all()
     serializer_class = ReceiptBookSerializer
-    permission_classes = []
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        if self.request.user.groups.filter(name="admin").exists():
+            return queryset
         return queryset.filter(user=self.request.user)
 
 
 class RetrieveReceiptBookAPIView(generics.RetrieveAPIView):
     queryset = ReceiptBook.objects.all()
     serializer_class = ReceiptBookSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin | IsOwner]
