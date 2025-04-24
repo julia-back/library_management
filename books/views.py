@@ -15,7 +15,6 @@ class BookCreateAPIView(generics.CreateAPIView):
 
 class BookListAPIView(generics.ListAPIView):
     queryset = Book.objects.all()
-    permission_classes = []
     serializer_class = BookSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     search_field = ["name", "description", "genre"]
@@ -25,7 +24,6 @@ class BookListAPIView(generics.ListAPIView):
 
 class BookRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
-    permission_classes = []
     serializer_class = BookSerializer
 
 
@@ -49,13 +47,11 @@ class AuthorCreateAPIView(generics.CreateAPIView):
 
 class AuthorListAPIView(generics.ListAPIView):
     queryset = Author.objects.all()
-    permission_classes = []
     serializer_class = AuthorSerializer
 
 
 class AuthorRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Author.objects.all()
-    permission_classes = []
     serializer_class = AuthorSerializer
 
 
