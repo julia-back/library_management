@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_filters",
+    "drf_spectacular",
 
     "books",
     "receipt_book",
@@ -52,6 +53,7 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend"
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -117,3 +119,37 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Library Management API",
+    "DESCRIPTION": """
+Library Management System
+
+A sophisticated backend application for comprehensive library 
+administration, featuring:
+
+Book & Author Management
+Full CRUD functionality for cataloging literary works and their creators
+
+User Administration
+Robust user profile and access control systems
+
+Loan Tracking
+Intelligent circulation system monitoring book checkouts and returns
+- Real-time status updates
+- Due date management
+- Historical lending records
+
+Key Technical Highlights
+- RESTfull API architecture
+- Secure authentication/authorization
+- Relational database design
+- Audit logging for all transactions
+
+This solution provides librarians with powerful tools for collection 
+management while enhancing patron experience through streamlined borrowing 
+processes.
+""",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
