@@ -3,11 +3,13 @@ from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
+from users.permissions import IsAdmin
+from rest_framework.permissions import IsAuthenticated
 
 
 class BookCreateAPIView(generics.CreateAPIView):
     queryset = Book.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = BookSerializer
 
 
@@ -29,19 +31,19 @@ class BookRetrieveAPIView(generics.RetrieveAPIView):
 
 class BookUpdateAPIView(generics.UpdateAPIView):
     queryset = Book.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = BookSerializer
 
 
 class BookDestroyAPIView(generics.DestroyAPIView):
     queryset = Book.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = BookSerializer
 
 
 class AuthorCreateAPIView(generics.CreateAPIView):
     queryset = Author.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = AuthorSerializer
 
 
@@ -59,11 +61,11 @@ class AuthorRetrieveAPIView(generics.RetrieveAPIView):
 
 class AuthorUpdateAPIView(generics.UpdateAPIView):
     queryset = Author.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = AuthorSerializer
 
 
 class AuthorDestroyAPIView(generics.DestroyAPIView):
     queryset = Author.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = AuthorSerializer

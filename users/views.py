@@ -3,6 +3,8 @@ from .models import User
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from users.permissions import IsAdmin
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserTokenObtainPairView(TokenObtainPairView):
@@ -21,13 +23,13 @@ class UserCreateAPIView(generics.CreateAPIView):
 
 class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = UserSerializer
 
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    permission_classes = []
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = UserSerializer
 
 
