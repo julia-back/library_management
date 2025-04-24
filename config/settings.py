@@ -125,7 +125,7 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": """
 Library Management System
 
-A sophisticated backend application for comprehensive library 
+A sophisticated backend application for comprehensive library
 administration, featuring:
 
 Book & Author Management
@@ -146,8 +146,8 @@ Key Technical Highlights
 - Relational database design
 - Audit logging for all transactions
 
-This solution provides librarians with powerful tools for collection 
-management while enhancing patron experience through streamlined borrowing 
+This solution provides librarians with powerful tools for collection
+management while enhancing patron experience through streamlined borrowing
 processes.
 """,
     "VERSION": "1.0.0",
