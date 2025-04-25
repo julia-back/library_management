@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Author(models.Model):
+    """Класс модели автора."""
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -10,6 +11,7 @@ class Author(models.Model):
 
 
 class Book(models.Model):
+    """Класс модели книги. Имеет связанное поле автора (многие-ко-многим)."""
 
     language_choices = {
         "eng": "Английский",

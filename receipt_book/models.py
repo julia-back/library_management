@@ -4,6 +4,7 @@ from books.models import Book
 
 
 class ReceiptBook(models.Model):
+    """Класс модели выдачи книги. Имеет связанные поля пользователя и книги."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.SET("book_deleted"))

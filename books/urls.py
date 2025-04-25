@@ -17,5 +17,4 @@ urlpatterns = [
     path("author/<int:pk>/", views.AuthorRetrieveAPIView.as_view(), name="author_retrieve"),
     path("author/<int:pk>/", views.AuthorUpdateAPIView.as_view(), name="author_update"),
     path("author/<int:pk>/", views.AuthorDestroyAPIView.as_view(), name="author_destroy"),
-
 ]
