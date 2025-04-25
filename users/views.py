@@ -1,4 +1,4 @@
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserCreateSerializer
 from .models import User
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
@@ -33,7 +33,15 @@ class UserCreateAPIView(generics.CreateAPIView):
 
     queryset = User.objects.all()
     permission_classes = [AllowAny]
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
+
+    def perform_create(self, serializer):
+        """
+        Метод создания пользователя. Устанавливает захешированный пароль.
+        """
+        user = serializer.save()
+        user.set_password(user.password)
+        user.save()
 
 
 class UserListAPIView(generics.ListAPIView):
