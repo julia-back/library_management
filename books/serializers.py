@@ -7,7 +7,12 @@ class BookSerializer(ModelSerializer):
 
     class Meta:
         model = Book
-        fields = "__all__"
+        fields = ["id", "serial_number", "name", "description", "author", "genre",
+                  "language", "publishing_house", "place_of_publication",
+                  "publication_year", "receipt_status"]
+        extra_kwargs = {
+            "id": {"read_only": True}
+        }
 
 
 class AuthorSerializer(ModelSerializer):
