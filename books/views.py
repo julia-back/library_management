@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 from .models import Book, Author
-from .serializers import BookSerializer, AuthorSerializer
+from .serializers import BookSerializer, AuthorSerializer, AuthorRetrieveSerializer
 from users.permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
 
@@ -92,7 +92,7 @@ class AuthorRetrieveAPIView(generics.RetrieveAPIView):
     """
 
     queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
+    serializer_class = AuthorRetrieveSerializer
 
 
 class AuthorUpdateAPIView(generics.UpdateAPIView):

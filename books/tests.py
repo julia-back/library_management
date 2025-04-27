@@ -141,6 +141,9 @@ class AuthorTestCase(APITestCase):
         self.user_admin.groups.add(self.admin_group)
 
         self.author = Author.objects.create(first_name="Author_1", last_name="Author_1")
+        self.book = Book.objects.create(name="book_1", description="description_1",
+                                        genre="genre_1", language="ru")
+        self.book.author.add(self.author)
 
     def test_create_author(self):
         url = reverse("books:author_create")
@@ -179,6 +182,9 @@ class AuthorTestCase(APITestCase):
 
     def test_retrieve_author(self):
         url = reverse("books:author_retrieve", args=[self.author.pk])
+        self.book_2 = Book.objects.create(name="book_2", description="description_2",
+                                          genre="genre_2", language="ru")
+        self.book_2.author.add(self.author)
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -186,11 +192,15 @@ class AuthorTestCase(APITestCase):
         self.client.force_authenticate(user=self.user)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(len(response.json()), 6)
+        self.assertTrue(response.json().get("books"))
+        self.assertEqual(len(response.json().get("books")), 2)
 
         self.client.force_authenticate(user=self.user_admin)
         response = self.client.get(url)
-        self.assertEqual(len(response.json()), 5)
+        self.assertEqual(len(response.json()), 6)
+        self.assertTrue(response.json().get("books"))
+        self.assertEqual(len(response.json().get("books")), 2)
 
     def test_update_author_put(self):
         url = reverse("books:author_update", args=[self.author.pk])
