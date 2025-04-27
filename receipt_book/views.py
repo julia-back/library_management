@@ -1,6 +1,8 @@
 from rest_framework import generics
+from rest_framework.response import Response
+
 from .models import ReceiptBook
-from .serializers import ReceiptBookSerializer
+from .serializers import ReceiptBookSerializer, CreateReceiptBookSerializer
 from datetime import date
 from users.permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
@@ -14,7 +16,7 @@ class CreateReceiptBookAPIView(generics.CreateAPIView):
     """
 
     queryset = ReceiptBook.objects.all()
-    serializer_class = ReceiptBookSerializer
+    serializer_class = CreateReceiptBookSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
 
     def perform_create(self, serializer):
@@ -22,10 +24,11 @@ class CreateReceiptBookAPIView(generics.CreateAPIView):
         Метод создания выдачи книги. Устанавливает статус книги в 'on_hands'.
         """
 
-        serializer.save()
-        book = serializer.book
+        receipt = serializer.validated_data
+        book = receipt.get("book")
         book.receipt_status = "on_hands"
         book.save()
+        serializer.save()
 
 
 class DestroyReceiptBookAPIView(generics.DestroyAPIView):
@@ -56,12 +59,18 @@ class ReturnBookAPIView(generics.GenericAPIView):
         """
 
         instance = self.get_object()
-        instance.return_date = date.today()
-        serializer = self.get_serializer(instance)
+        if instance.return_date is None:
+            instance.return_date = date.today()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
+
         book = instance.book
         book.receipt_status = "free"
         book.save()
+
+        return Response(serializer.data)
 
 
 class ListReceiptBookAPIView(generics.ListAPIView):
