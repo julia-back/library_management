@@ -126,9 +126,9 @@ class BookTestCase(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        # self.client.force_authenticate(user=self.user_admin)
-        # response = self.client.delete(url)
-        # self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.client.force_authenticate(user=self.user_admin)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 class AuthorTestCase(APITestCase):

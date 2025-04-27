@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.response import Response
-
+from django.db import transaction
 from .models import ReceiptBook
 from .serializers import ReceiptBookSerializer, CreateReceiptBookSerializer
 from datetime import date
@@ -23,12 +23,11 @@ class CreateReceiptBookAPIView(generics.CreateAPIView):
         """
         Метод создания выдачи книги. Устанавливает статус книги в 'on_hands'.
         """
-
-        receipt = serializer.validated_data
-        book = receipt.get("book")
-        book.receipt_status = "on_hands"
-        book.save()
-        serializer.save()
+        with transaction.atomic():
+            receipt = serializer.save()
+            book = receipt.book
+            book.receipt_status = "on_hands"
+            book.save()
 
 
 class DestroyReceiptBookAPIView(generics.DestroyAPIView):
@@ -62,13 +61,14 @@ class ReturnBookAPIView(generics.GenericAPIView):
         if instance.return_date is None:
             instance.return_date = date.today()
 
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        with transaction.atomic():
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
 
-        book = instance.book
-        book.receipt_status = "free"
-        book.save()
+            book = instance.book
+            book.receipt_status = "free"
+            book.save()
 
         return Response(serializer.data)
 
