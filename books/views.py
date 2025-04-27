@@ -5,6 +5,7 @@ from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer, AuthorRetrieveSerializer
 from users.permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
+from django.core.cache import cache
 
 
 class BookCreateAPIView(generics.CreateAPIView):
@@ -31,6 +32,13 @@ class BookListAPIView(generics.ListAPIView):
     ordering_field = ["name", "author"]
     filterset_fields = ["serial_number", "language", "author", "genre", "publishing_house"]
 
+    def get_queryset(self):
+        queryset = cache.get("book_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("book_queryset_all", queryset, 60 * 5)
+        return queryset
+
 
 class BookRetrieveAPIView(generics.RetrieveAPIView):
     """
@@ -40,6 +48,13 @@ class BookRetrieveAPIView(generics.RetrieveAPIView):
 
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+    def get_queryset(self):
+        queryset = cache.get("book_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("book_queryset_all", queryset, 60 * 5)
+        return queryset
 
 
 class BookUpdateAPIView(generics.UpdateAPIView):
@@ -84,6 +99,13 @@ class AuthorListAPIView(generics.ListAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
+    def get_queryset(self):
+        queryset = cache.get("author_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("author_queryset_all", queryset, 60 * 5)
+        return queryset
+
 
 class AuthorRetrieveAPIView(generics.RetrieveAPIView):
     """
@@ -93,6 +115,13 @@ class AuthorRetrieveAPIView(generics.RetrieveAPIView):
 
     queryset = Author.objects.all()
     serializer_class = AuthorRetrieveSerializer
+
+    def get_queryset(self):
+        queryset = cache.get("author_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("author_queryset_all", queryset, 60 * 5)
+        return queryset
 
 
 class AuthorUpdateAPIView(generics.UpdateAPIView):

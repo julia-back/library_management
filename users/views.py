@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.permissions import IsAdmin, IsCurrentUser
 from rest_framework.permissions import IsAuthenticated
+from django.core.cache import cache
 
 
 class UserTokenObtainPairView(TokenObtainPairView):
@@ -54,6 +55,13 @@ class UserListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        queryset = cache.get("user_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("user_queryset_all", queryset, 60 * 5)
+        return queryset
+
 
 class UserRetrieveAPIView(generics.RetrieveAPIView):
     """
@@ -65,6 +73,13 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated, IsAdmin | IsCurrentUser]
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        queryset = cache.get("user_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("user_queryset_all", queryset, 60 * 5)
+        return queryset
 
 
 class UserUpdateAPIView(generics.UpdateAPIView):

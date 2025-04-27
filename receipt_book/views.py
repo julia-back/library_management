@@ -7,6 +7,7 @@ from datetime import date
 from users.permissions import IsAdmin
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
+from django.core.cache import cache
 
 
 class CreateReceiptBookAPIView(generics.CreateAPIView):
@@ -91,7 +92,11 @@ class ListReceiptBookAPIView(generics.ListAPIView):
         администраторов, предоставляет список всех выдач книг.
         """
 
-        queryset = super().get_queryset()
+        queryset = cache.get("receipt_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("receipt_queryset_all", queryset, 60 * 5)
+
         if self.request.user.groups.filter(name="admin").exists():
             return queryset
         return queryset.filter(user=self.request.user)
@@ -107,3 +112,10 @@ class RetrieveReceiptBookAPIView(generics.RetrieveAPIView):
     queryset = ReceiptBook.objects.all()
     serializer_class = ReceiptBookSerializer
     permission_classes = [IsAuthenticated, IsAdmin | IsOwner]
+
+    def get_queryset(self):
+        queryset = cache.get("receipt_queryset_all")
+        if queryset is None:
+            queryset = super().get_queryset()
+            cache.set("receipt_queryset_all", queryset, 60 * 5)
+        return queryset
