@@ -16,6 +16,9 @@ django-filter = "^25.1"
 drf-spectacular = "^0.28.0"
 django-cors-headers = "^4.7.0"
 redis = "^5.2.1"
+celery = "^5.5.2"
+django-celery-beat = "^2.8.0"
+gevent = "^25.4.2"
 
 
 [tool.poetry.group.dev.dependencies]
