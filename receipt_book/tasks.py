@@ -1,10 +1,9 @@
 from celery import shared_task
 from .models import ReceiptBook
-from datetime import date, timedelta, datetime, time
+from datetime import date, timedelta
 from django.core.cache import cache
 from django.core.mail import send_mail
 from config.settings import EMAIL_HOST_USER
-from django.utils import timezone
 
 
 @shared_task
