@@ -19,6 +19,7 @@ redis = "^5.2.1"
 celery = "^5.5.2"
 django-celery-beat = "^2.8.0"
 gevent = "^25.4.2"
+gunicorn = "^23.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
