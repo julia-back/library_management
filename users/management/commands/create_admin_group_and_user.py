@@ -13,8 +13,8 @@ class Command(BaseCommand):
             "получает пользователя и добавляет в группу.")
 
     def handle(self, *args, **options):
-        admin_group = Group.objects.get_or_create(name="admin")
-        admin_user = User.objects.get_or_create(email=os.getenv("ADMIN_USER_EMAIL"),
-                                                username=os.getenv("ADMIN_USER_USERNAME"),
-                                                password=os.getenv("ADMIN_USER_PASSWORD"))
-        admin_user.group_set.add(admin_group)
+        admin_group, created = Group.objects.get_or_create(name="admin")
+        admin_user, created = User.objects.get_or_create(email=os.getenv("ADMIN_USER_EMAIL"),
+                                                         username=os.getenv("ADMIN_USER_USERNAME"),
+                                                         password=os.getenv("ADMIN_USER_PASSWORD"))
+        admin_user.groups.add(admin_group)

@@ -14,4 +14,6 @@ urlpatterns = [
     path("user_retrieve/<int:pk>/", views.UserRetrieveAPIView.as_view(), name="user_retrieve"),
     path("user_update/<int:pk>/", views.UserUpdateAPIView.as_view(), name="user_update"),
     path("user_destroy/<int:pk>/", views.UserDestroyAPIView.as_view(), name="user_destroy"),
+
+    path("add_in_admin_group/<int:pk>/", views.AddUserInAdminGroup.as_view(), name="add_in_admin")
 ]

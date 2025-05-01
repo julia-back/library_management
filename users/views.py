@@ -1,11 +1,15 @@
+from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from .serializers import UserSerializer, UserCreateSerializer
 from .models import User
-from rest_framework import generics
+from django.contrib.auth.models import Group
+from rest_framework import generics, views
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.permissions import IsAdmin, IsCurrentUser
 from rest_framework.permissions import IsAuthenticated
 from django.core.cache import cache
+from rest_framework import status
 
 
 class UserTokenObtainPairView(TokenObtainPairView):
@@ -102,3 +106,28 @@ class UserDestroyAPIView(generics.DestroyAPIView):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated, IsCurrentUser]
     serializer_class = UserSerializer
+
+
+class AddUserInAdminGroup(views.APIView):
+    """
+    Представление добавления пользователя в группу admin.
+    Доступно только пользователям, состоящим в группе администраторов.
+    """
+
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            admin_group, created = Group.objects.get_or_create(name="admin")
+            user = User.objects.get(pk=kwargs.get("pk"))
+
+            if user.groups.filter(name="admin").exists():
+                return Response(data={"comment": "User already in admin group 'admin'."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            user.groups.add(admin_group)
+            return Response(data={"comment": "User successfully added in group 'admin'."},
+                            status=status.HTTP_200_OK)
+        except NotFound:
+            return Response(data={"comment": "User not found."},
+                            status=status.HTTP_400_BAD_REQUEST)
